@@ -1,5 +1,11 @@
 import streamlit as st
 import requests
+import os
+
+API_BASE_URL = os.getenv(
+    "API_BASE_URL",
+    "http://127.0.0.1:8000"
+)
 
 st.set_page_config(
     page_title="FitAgent AI",
@@ -181,7 +187,7 @@ with tab2:
           profile["timeline_weeks"] = timeline_weeks
 
           assessment_response = requests.post(
-                "http://127.0.0.1:8000/api/v1/fitness/assess-goal",
+                f"{API_BASE_URL}/api/v1/fitness/assess-goal",
                 json={
                     "current_weight_lb": weight,
                     "target_weight_lb": target_weight,
@@ -219,7 +225,7 @@ with tab2:
         with st.spinner("Generating your meal plan.."):
             try:
                 response = requests.post(
-                    "http://127.0.0.1:8000/api/v1/nutrition/meal-plan",
+                    f"{API_BASE_URL}/api/v1/nutrition/meal-plan",
                     json=profile,
                     timeout=120
                 )
@@ -284,7 +290,7 @@ with tab2:
          if question.strip():
             with st.spinner("AI is thinking"):
                 try:
-                    response=requests.post("http://127.0.0.1:8000/api/v1/fitness/chat",
+                    response=requests.post(f"{API_BASE_URL}/api/v1/fitness/chat",
                                             json={
                                                     "question": question,
                                                     "profile": {
